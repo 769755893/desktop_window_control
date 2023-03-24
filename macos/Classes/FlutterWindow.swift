@@ -67,7 +67,7 @@ class FlutterWindow: BaseFlutterWindow {
     windowId = id
     window = NSWindow(
       contentRect: NSRect(x: 0, y: 0, width: 480, height: 270),
-      styleMask: [.miniaturizable, .closable, .resizable, .titled, .fullSizeContentView],
+      styleMask: [.closable, .resizable, .titled, .fullSizeContentView],
       backing: .buffered, defer: false)
     let project = FlutterDartProject()
     project.dartEntrypointArguments = ["multi_window", "\(windowId)", arguments]
@@ -78,7 +78,10 @@ class FlutterWindow: BaseFlutterWindow {
     FlutterMultiWindowPlugin.registerInternal(with: plugin)
     let windowChannel = WindowChannel.register(with: plugin, windowId: id)
     // Give app a chance to register plugin.
+
     FlutterMultiWindowPlugin.onWindowCreatedCallback?(flutterViewController)
+
+    RegisterPluginsOrigin(registry: flutterViewController)
 
     super.init(window: window, channel: windowChannel)
 
@@ -108,4 +111,10 @@ extension FlutterWindow: NSWindowDelegate {
     delegate?.onClose(windowId: windowId)
     return true
   }
+}
+
+func RegisterPluginsOrigin(registry: FlutterPluginRegistry) {
+  SharedPreferencesPluginOriginal.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
+  WindowManagerPluginOriginal.register(with: registry.registrar(forPlugin: "WindowManagerPlugin"))
+  ScreenRetrieverPluginOriginal.register(with: registry.registrar(forPlugin: "ScreenRetrieverPlugin"))
 }
