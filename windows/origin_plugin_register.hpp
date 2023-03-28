@@ -19,7 +19,7 @@
 
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 19
 
-namespace WindowManagerOriginPlugin{
+namespace WindowManagerOriginPlugin {
     ///////////////////////// WindowManager Plugin
     const flutter::EncodableValue* ValueOrNull(const flutter::EncodableMap& map,
         const char* key) {

@@ -13,6 +13,7 @@
 
 #include "include/desktop_multi_window/desktop_multi_window_plugin.h"
 #include "multi_window_plugin_internal.h"
+#include "origin_plugin_register.hpp"
 
 namespace {
 
