@@ -9,27 +9,27 @@
 
 class BaseFlutterWindow {
 
-public:
+ public:
 
-	virtual ~BaseFlutterWindow() = default;
+  virtual ~BaseFlutterWindow() = default;
 
-	virtual WindowChannel* GetWindowChannel() = 0;
+  virtual WindowChannel *GetWindowChannel() = 0;
 
-	void Show();
+  void Show();
 
-	void Hide();
+  void Hide();
 
-	void Close();
+  void Close();
 
-	void SetTitle(const std::string& title);
+  void SetTitle(const std::string &title);
 
-	void SetBounds(double_t x, double_t y, double_t width, double_t height);
+  void SetBounds(double_t x, double_t y, double_t width, double_t height);
 
-	void Center();
+  void Center();
 
-protected:
+ protected:
 
-	virtual HWND GetWindowHandle() = 0;
+  virtual HWND GetWindowHandle() = 0;
 
 };
 
