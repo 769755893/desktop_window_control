@@ -48,7 +48,7 @@ namespace WindowManagerOriginPlugin {
         POINT maximum_size_ = { -1, -1 };
         bool is_resizable_ = true;
         bool is_skip_taskbar_ = true;
-        std::string title_bar_style_ = "hidden";
+        std::string title_bar_style_ = "normal";
         double opacity_ = 1;
 
         bool is_resizing_ = false;

@@ -19,7 +19,6 @@ FLUTTER_PLUGIN_EXPORT void DesktopMultiWindowPluginRegisterWithRegistrar(
 // flutter_view_controller: pointer to the flutter::FlutterViewController
 typedef void (*WindowCreatedCallback)(void *flutter_view_controller);
 FLUTTER_PLUGIN_EXPORT void DesktopMultiWindowSetWindowCreatedCallback(WindowCreatedCallback callback);
-
 #if defined(__cplusplus)
 }  // extern "C"
 #endif

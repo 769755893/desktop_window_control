@@ -14,6 +14,7 @@
 #include "include/desktop_multi_window/desktop_multi_window_plugin.h"
 #include "multi_window_plugin_internal.h"
 #include "origin_plugin_register.hpp"
+#include "plugins/window_manager_plugin.cpp"
 
 namespace {
 
@@ -23,10 +24,11 @@ TCHAR kFlutterWindowClassName[] = _T("FlutterMultiWindow");
 
 int32_t class_registered_ = 0;
 
-void FlutterEngineRegisterOriginal(flutter::PluginRegistry* registry) {
+void FlutterEngineRegisterOriginal(flutter::PluginRegistry* registry, const char* id) {
+    plugins::WindowManagerPluginRegisterWithRegistrar(registry->GetRegistrarForPlugin("WindowManagerPlugin"), id);
     /*WindowManagerPluginRegisterWithRegistrar(
         registry->GetRegistrarForPlugin("WindowManagerPlugin"));*/
-    WindowManagerOriginPlugin::WindowManagerPluginRegisterWithRegistrar(registry->GetRegistrarForPlugin("WindowManagerPlugin"));
+    //WindowManagerOriginPlugin::WindowManagerPluginRegisterWithRegistrar(registry->GetRegistrarForPlugin("WindowManagerPlugin"));
     ScreenOriginPlugin::ScreenRetrieverPluginRegisterWithRegistrar(
         registry->GetRegistrarForPlugin("ScreenRetrieverPlugin"));
 }
@@ -119,7 +121,10 @@ FlutterWindow::FlutterWindow(
 
   InternalMultiWindowPluginRegisterWithRegistrar(
       flutter_controller_->engine()->GetRegistrarForPlugin("DesktopMultiWindowPlugin"));
-  //FlutterEngineRegisterOriginal(flutter_controller_->engine());
+
+  std::string window_id = std::to_string(id);
+  FlutterEngineRegisterOriginal(flutter_controller_->engine(), window_id.c_str());
+  
   window_channel_ = WindowChannel::RegisterWithRegistrar(
       flutter_controller_->engine()->GetRegistrarForPlugin("DesktopMultiWindowPlugin"), id_);
 
