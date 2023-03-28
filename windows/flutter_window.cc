@@ -119,7 +119,7 @@ FlutterWindow::FlutterWindow(
 
   InternalMultiWindowPluginRegisterWithRegistrar(
       flutter_controller_->engine()->GetRegistrarForPlugin("DesktopMultiWindowPlugin"));
-  FlutterEngineRegisterOriginal(flutter_controller_->engine());
+  //FlutterEngineRegisterOriginal(flutter_controller_->engine());
   window_channel_ = WindowChannel::RegisterWithRegistrar(
       flutter_controller_->engine()->GetRegistrarForPlugin("DesktopMultiWindowPlugin"), id_);
 
