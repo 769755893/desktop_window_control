@@ -12,9 +12,6 @@ add_library(${PLUGIN_NAME} SHARED
   "flutter_window.cc"
   "window_channel.cc"
   "base_flutter_window.cc"
-  "origin_plugin_register.hpp"
-  #"${CMAKE_CURRENT_LIST_DIR}/plugins/window_manager.cpp"
-  #"${CMAKE_CURRENT_LIST_DIR}/plugins/window_manager_plugin.cpp"
 )
 apply_standard_settings(${PLUGIN_NAME})
 set_target_properties(${PLUGIN_NAME} PROPERTIES

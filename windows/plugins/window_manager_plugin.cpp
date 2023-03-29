@@ -33,7 +33,7 @@ bool IsWindows11OrGreater() {
 
 class WindowManagerPlugin : public flutter::Plugin {
  public:
-  static void RegisterWithRegistrar(flutter::PluginRegistrarWindows* registrar, const char* id);
+  static void RegisterWithRegistrar(flutter::PluginRegistrarWindows* registrar);
 
   WindowManagerPlugin(flutter::PluginRegistrarWindows* registrar);
 
@@ -64,7 +64,7 @@ class WindowManagerPlugin : public flutter::Plugin {
 
 // static
 void WindowManagerPlugin::RegisterWithRegistrar(
-    flutter::PluginRegistrarWindows* registrar, const char* id) {
+    flutter::PluginRegistrarWindows* registrar) {
 
   auto plugin = std::make_unique<WindowManagerPlugin>(registrar);
 
@@ -548,10 +548,10 @@ void WindowManagerPlugin::HandleMethodCall(
 }
 
 void WindowManagerPluginRegisterWithRegistrar(
-    FlutterDesktopPluginRegistrarRef registrar, const char* id) {
+    FlutterDesktopPluginRegistrarRef registrar) {
     WindowManagerPlugin::RegisterWithRegistrar(
         flutter::PluginRegistrarManager::GetInstance()
-        ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar), id);
+        ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }
 
 }  // namespace
