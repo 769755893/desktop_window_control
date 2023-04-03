@@ -7,16 +7,42 @@
 
 import Foundation
 import FlutterMacOS
+#if os(iOS)
+import Flutter
+#elseif os(macOS)
+import FlutterMacOS
+#else
+#error("Unsupported platform.")
+#endif
 
-/// Generated class from Pigeon.
+
+
+private func wrapResult(_ result: Any?) -> [Any?] {
+  return [result]
+}
+
+private func wrapError(_ error: Any) -> [Any?] {
+  if let flutterError = error as? FlutterError {
+    return [
+      flutterError.code,
+      flutterError.message,
+      flutterError.details
+    ]
+  }
+  return [
+    "\(error)",
+    "\(type(of: error))",
+    "Stacktrace: \(Thread.callStackSymbols)"
+  ]
+}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol UserDefaultsApi {
-  func remove(key: String)
-  func setBool(key: String, value: Bool)
-  func setDouble(key: String, value: Double)
-  func setValue(key: String, value: Any)
-  func getAll() -> [String?: Any?]
-  func clear()
+  func remove(key: String) throws
+  func setBool(key: String, value: Bool) throws
+  func setDouble(key: String, value: Double) throws
+  func setValue(key: String, value: Any) throws
+  func getAllWithPrefix(prefix: String) throws -> [String?: Any?]
+  func clearWithPrefix(prefix: String) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -27,10 +53,14 @@ class UserDefaultsApiSetup {
     let removeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.remove", binaryMessenger: binaryMessenger)
     if let api = api {
       removeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
+        let args = message as! [Any]
         let keyArg = args[0] as! String
-        api.remove(key: keyArg)
-        reply(wrapResult(nil))
+        do {
+          try api.remove(key: keyArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
       }
     } else {
       removeChannel.setMessageHandler(nil)
@@ -38,11 +68,15 @@ class UserDefaultsApiSetup {
     let setBoolChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.setBool", binaryMessenger: binaryMessenger)
     if let api = api {
       setBoolChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
+        let args = message as! [Any]
         let keyArg = args[0] as! String
         let valueArg = args[1] as! Bool
-        api.setBool(key: keyArg, value: valueArg)
-        reply(wrapResult(nil))
+        do {
+          try api.setBool(key: keyArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
       }
     } else {
       setBoolChannel.setMessageHandler(nil)
@@ -50,11 +84,15 @@ class UserDefaultsApiSetup {
     let setDoubleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.setDouble", binaryMessenger: binaryMessenger)
     if let api = api {
       setDoubleChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
+        let args = message as! [Any]
         let keyArg = args[0] as! String
         let valueArg = args[1] as! Double
-        api.setDouble(key: keyArg, value: valueArg)
-        reply(wrapResult(nil))
+        do {
+          try api.setDouble(key: keyArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
       }
     } else {
       setDoubleChannel.setMessageHandler(nil)
@@ -62,46 +100,50 @@ class UserDefaultsApiSetup {
     let setValueChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.setValue", binaryMessenger: binaryMessenger)
     if let api = api {
       setValueChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
+        let args = message as! [Any]
         let keyArg = args[0] as! String
-        let valueArg = args[1]!
-        api.setValue(key: keyArg, value: valueArg)
-        reply(wrapResult(nil))
+        let valueArg = args[1]
+        do {
+          try api.setValue(key: keyArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
       }
     } else {
       setValueChannel.setMessageHandler(nil)
     }
-    let getAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.getAll", binaryMessenger: binaryMessenger)
+    let getAllWithPrefixChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.getAllWithPrefix", binaryMessenger: binaryMessenger)
     if let api = api {
-      getAllChannel.setMessageHandler { _, reply in
-        let result = api.getAll()
-        reply(wrapResult(result))
+      getAllWithPrefixChannel.setMessageHandler { message, reply in
+        let args = message as! [Any]
+        let prefixArg = args[0] as! String
+        do {
+          let result = try api.getAllWithPrefix(prefix: prefixArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
       }
     } else {
-      getAllChannel.setMessageHandler(nil)
+      getAllWithPrefixChannel.setMessageHandler(nil)
     }
-    let clearChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.clear", binaryMessenger: binaryMessenger)
+    let clearWithPrefixChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.UserDefaultsApi.clearWithPrefix", binaryMessenger: binaryMessenger)
     if let api = api {
-      clearChannel.setMessageHandler { _, reply in
-        api.clear()
-        reply(wrapResult(nil))
+      clearWithPrefixChannel.setMessageHandler { message, reply in
+        let args = message as! [Any]
+        let prefixArg = args[0] as! String
+        do {
+          try api.clearWithPrefix(prefix: prefixArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
       }
     } else {
-      clearChannel.setMessageHandler(nil)
+      clearWithPrefixChannel.setMessageHandler(nil)
     }
   }
-}
-
-private func wrapResult(_ result: Any?) -> [Any?] {
-  return [result]
-}
-
-private func wrapError(_ error: FlutterError) -> [Any?] {
-  return [
-    error.code,
-    error.message,
-    error.details
-  ]
 }
 
 
@@ -117,8 +159,8 @@ public class SharedPreferencesPluginOriginal: NSObject, FlutterPlugin, UserDefau
     UserDefaultsApiSetup.setUp(binaryMessenger: messenger, api: instance)
   }
 
-  func getAll() -> [String? : Any?] {
-    return getAllPrefs();
+  func getAllWithPrefix(prefix: String) -> [String? : Any?] {
+    return getAllPrefs(prefix: prefix)
   }
 
   func setBool(key: String, value: Bool) {
@@ -137,23 +179,23 @@ public class SharedPreferencesPluginOriginal: NSObject, FlutterPlugin, UserDefau
     UserDefaults.standard.removeObject(forKey: key)
   }
 
-  func clear() {
+  func clearWithPrefix(prefix: String) {
     let defaults = UserDefaults.standard
-    for (key, _) in getAllPrefs() {
+    for (key, _) in getAllPrefs(prefix: prefix) {
       defaults.removeObject(forKey: key)
     }
   }
-}
 
-/// Returns all preferences stored by this plugin.
-private func getAllPrefs() -> [String: Any] {
-  var filteredPrefs: [String: Any] = [:]
-  if let appDomain = Bundle.main.bundleIdentifier,
-    let prefs = UserDefaults.standard.persistentDomain(forName: appDomain)
-  {
-    for (key, value) in prefs where key.hasPrefix("flutter.") {
-      filteredPrefs[key] = value
+  /// Returns all preferences stored with specified prefix.
+  func getAllPrefs(prefix: String) -> [String: Any] {
+    var filteredPrefs: [String: Any] = [:]
+    if let appDomain = Bundle.main.bundleIdentifier,
+      let prefs = UserDefaults.standard.persistentDomain(forName: appDomain)
+    {
+      for (key, value) in prefs where key.hasPrefix(prefix) {
+        filteredPrefs[key] = value
+      }
     }
+    return filteredPrefs
   }
-  return filteredPrefs
 }
